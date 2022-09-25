@@ -6,11 +6,18 @@ type ProductItemProps = {
   product: Product;
 };
 
-const ProductItem = ({ product: { name, thumbnail, price } }: ProductItemProps) => (
-  <Container>
+const changePrice = (price: number) => {
+  const priceNum = price;
+  const chagePirceNum = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return chagePirceNum;
+};
+
+const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
+  <Container href={`/products/${id}`}>
     <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
     <Name>{name}</Name>
-    <Price>{price}</Price>
+    <Price>{changePrice(price)}</Price>
   </Container>
 );
 

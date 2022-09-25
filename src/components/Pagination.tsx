@@ -1,21 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 
-const Pagination = () => {
+const Pagination = (props: any) => {
+  let lastPage = Math.ceil(props.totalCount / 10);
+  const [startPage, setStartPage] = useState(1);
+  const [active, setActive] = useState('1');
+
+  const onClickPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setActive(event.currentTarget.id);
+    props.setCurrentPage?.(event.currentTarget.id);
+  };
+
+  const onClickPrevPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setStartPage(startPage - 5);
+    setActive(event.currentTarget.id);
+    props.setCurrentPage?.(event.currentTarget.id);
+  };
+
+  const onClickNextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setStartPage(startPage + 5);
+    setActive(event.currentTarget.id);
+    props.setCurrentPage?.(event.currentTarget.id);
+  };
+
   return (
     <Container>
-      <Button disabled>
+      <Button disabled={startPage === 1} onClick={onClickPrevPage} id={startPage - 5}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
-            {page}
-          </Page>
-        ))}
+        {new Array(5).fill(1).map((_, page) => {
+          //console.log(page + startPage);
+          return (
+            <>
+              {page + startPage <= lastPage ? (
+                <Page
+                  key={page}
+                  selected={page === 1}
+                  disabled={page === page + startPage}
+                  onClick={onClickPage}
+                  id={page + startPage}
+                >
+                  {page + startPage}
+                </Page>
+              ) : null}
+            </>
+          );
+        })}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button disabled={startPage + 5 > lastPage} onClick={onClickNextPage} id={startPage + 5}>
         <VscChevronRight />
       </Button>
     </Container>

@@ -4,15 +4,22 @@ import styled from 'styled-components';
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { useState } from 'react';
+
 setupMSW();
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <>
       <GlobalStyle />
       <Background />
       <Content>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </Content>
     </>
   );

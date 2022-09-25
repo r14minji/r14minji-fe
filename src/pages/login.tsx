@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import LoginForm from '../components/login/LoginForm';
 
 const LoginPage: NextPage = () => {
   const [userId, setUserID] = useState('');
@@ -128,6 +129,7 @@ const LoginPage: NextPage = () => {
           로그인
         </LoginButton>
       </Form>
+      <div>test</div>
     </>
   );
 };
@@ -160,7 +162,7 @@ const TextLabel = styled.label`
 `;
 
 const TextInput = styled.input<{ isErr?: boolean }>`
-  border: 1px solid #000;
+  border: none;
   margin-top: 8px;
   padding: 16px;
   background: ${(props) => (props.isErr ? '#fdedee' : '#f7f7fa')};
