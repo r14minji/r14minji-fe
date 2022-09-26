@@ -6,6 +6,7 @@ import GlobalStyle from '../styles/GlobalStyle';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
+import { wrapper } from '../redux/store';
 
 setupMSW();
 
@@ -25,7 +26,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   );
 }
 
-export default MyApp;
+//export default MyApp;
+
+export default wrapper.withRedux(MyApp);
 
 const Background = styled.div`
   position: fixed;

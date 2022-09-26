@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import LoginForm from '../components/login/LoginForm';
+import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLogin } from '../redux/actions/userActions';
 
-const LoginPage: NextPage = () => {
+const LoginPage: NextPage = (props) => {
   const [userId, setUserID] = useState('');
   const [password, setPassword] = useState('');
   const [errUserId, setErrUserId] = useState(false);
@@ -13,8 +16,10 @@ const LoginPage: NextPage = () => {
   const [disable, setDisabled] = useState(true);
   const [validUserId, setValidUserId] = useState(false);
   const [validPassWord, setValidPassWord] = useState(false);
+  const dispatch = useDispatch();
+  //const user = useSelector((state) => state.user.value);
 
-  const onChangeUserId = (event: any) => {
+  const onChangeUserId = (event: React.FormEvent<HTMLInputElement>) => {
     let valueUserId = event.currentTarget.value;
     const checkUserId = /^[A-Za-z0-9]{5,30}$/;
     if (checkUserId.test(valueUserId)) {
@@ -24,14 +29,14 @@ const LoginPage: NextPage = () => {
     setUserID(valueUserId);
   };
 
-  const onBlurUserId = (event: any) => {
+  const onBlurUserId = (event: React.FormEvent<HTMLInputElement>) => {
     let valueUserId = event.currentTarget.value;
     const checkUserId = /^[A-Za-z0-9]{5,30}$/;
     !valueUserId || checkUserId.test(valueUserId) ? setErrUserId(false) : setErrUserId(true);
     setUserID(valueUserId);
   };
 
-  const onChangePassword = (event: any) => {
+  const onChangePassword = (event: React.FormEvent<HTMLInputElement>) => {
     let valuePassword = event.currentTarget.value;
     const checkPassword = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
     if (checkPassword.test(valuePassword)) {
@@ -41,7 +46,7 @@ const LoginPage: NextPage = () => {
     setPassword(valuePassword);
   };
 
-  const onBlurPassword = (event: any) => {
+  const onBlurPassword = (event: React.FormEvent<HTMLInputElement>) => {
     let valuePassword = event.currentTarget.value;
     const checkPassword = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
     !valuePassword || checkPassword.test(valuePassword)
@@ -54,19 +59,21 @@ const LoginPage: NextPage = () => {
     validUserId && validPassWord ? setDisabled(false) : setDisabled(true);
   };
 
-  const onSubmitHandler = (event: any) => {
-    //event.preventDefault();
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     console.log('id', userId);
     console.log('password', password);
-
-    let body = {
-      id: userId,
-      password: password,
-    };
-
-    axios.post('/login', body).then((res) => {
-      console.log(res.data);
-    });
+    if (!userId) {
+      return alert('ID를 입력하세요.');
+    } else if (!password) {
+      return alert('Password를 입력하세요.');
+    } else {
+      let body = {
+        id: userId,
+        password: password,
+      };
+      //dispatch(userLogin(body));
+    }
   };
 
   return (
@@ -129,7 +136,6 @@ const LoginPage: NextPage = () => {
           로그인
         </LoginButton>
       </Form>
-      <div>test</div>
     </>
   );
 };
@@ -147,7 +153,7 @@ const Title = styled.a`
   font-size: 48px;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 40px;
