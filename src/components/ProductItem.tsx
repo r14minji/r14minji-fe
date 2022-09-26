@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { Product } from '../types/product';
-
+import useLocalStorage from 'use-local-storage';
 type ProductItemProps = {
   product: Product;
 };
@@ -9,7 +9,6 @@ type ProductItemProps = {
 const changePrice = (price: number) => {
   const priceNum = price;
   const chagePirceNum = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
   return chagePirceNum;
 };
 
@@ -20,6 +19,21 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
     <Price>{changePrice(price)}</Price>
   </Container>
 );
+
+// const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => {
+//   //const [scrollY, setScrollY] = useLocalStorage<number>('productScroll', 0);
+
+//   return (
+//     <Container
+//       href={`/products/${id}`}
+//       onClick={() => sessionStorage.setItem('scrollYKey', `${window.scrollY}`)}
+//     >
+//       <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+//       <Name>{name}</Name>
+//       <Price>{changePrice(price)}</Price>
+//     </Container>
+//   );
+// };
 
 export default ProductItem;
 

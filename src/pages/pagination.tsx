@@ -17,7 +17,7 @@ const PaginationPage: NextPage = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const axiosProductsGet = async () => {
+  const getProducts = async () => {
     try {
       const res = await axios.get(`/products?page=${currentPage}&size=10`);
       console.log('Status 200');
@@ -26,7 +26,7 @@ const PaginationPage: NextPage = () => {
       console.log('error');
     }
   };
-  const { data: resResult, refetch } = useQuery([currentPage], axiosProductsGet, {
+  const { data: resResult, refetch } = useQuery([currentPage], getProducts, {
     //enabled: page != null,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {

@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 setupMSW();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (

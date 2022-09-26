@@ -36,8 +36,8 @@ const Pagination = (props: any) => {
             <>
               {page + startPage <= lastPage ? (
                 <Page
-                  key={page}
-                  selected={page === 1}
+                  key={'num' + page}
+                  selected={page === 0}
                   disabled={page === page + startPage}
                   onClick={onClickPage}
                   id={page + startPage}
