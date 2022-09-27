@@ -1,0 +1,62 @@
+import React from 'react';
+import styled from 'styled-components';
+import Link from 'next/link';
+import { useAppSelector } from '../../store/configureStore.hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearUser, userValue } from '../../store/modules/user';
+import { useRouter } from 'next/router';
+
+function HeaderComponent() {
+  const user: userValue = useAppSelector((state) => state.persistedReducer.user);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const IsLogout = () => {
+    dispatch(clearUser(user)); //params에 들어올 값의 타입을 정의한 것이 없는데, params를 넣은 경우
+  };
+
+  return (
+    <Header>
+      <Link href='/'>
+        <Title>HAUS</Title>
+      </Link>
+      {user.id !== '' ? (
+        <>
+          <Container>
+            <div>{user.name}</div>
+            <Link href='/'>
+              <LogoutButton onClick={() => IsLogout()}>logout</LogoutButton>
+            </Link>
+          </Container>
+        </>
+      ) : (
+        <Link href='/login'>
+          <p>login</p>
+        </Link>
+      )}
+    </Header>
+  );
+}
+
+export default HeaderComponent;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+`;
+
+const Title = styled.a`
+  font-size: 48px;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
+const LogoutButton = styled.button`
+  text-align: right;
+`;

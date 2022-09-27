@@ -7,6 +7,7 @@ import products from '../api/data/products.json';
 import ProductList from '../components/ProductList';
 import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
+import HeaderComponent from '../components/common/Header';
 
 const InfiniteScrollPage: NextPage = () => {
   const observerRef = useRef<IntersectionObserver>();
@@ -48,7 +49,7 @@ const InfiniteScrollPage: NextPage = () => {
     console.log('data', data);
     if (data) {
       const items = data.pages
-        .map((page) => page.products.map((product) => (product !== null ? product : [])))
+        .map((page) => page.products.map((product: any) => (product !== null ? product : [])))
         .flat();
       //console.log('items', items);
       setLists(items);
@@ -62,14 +63,7 @@ const InfiniteScrollPage: NextPage = () => {
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
+      <HeaderComponent />
       <Container>
         <ProductList products={list || []} />
         <div ref={fetchMoreRef} />

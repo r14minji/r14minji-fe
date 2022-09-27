@@ -3,10 +3,10 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import LoginForm from '../components/login/LoginForm';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import { userLogin } from '../redux/actions/userActions';
+import { loginUser } from '../store/modules/user';
+import HeaderComponent from '../components/common/Header';
 
 const LoginPage: NextPage = (props) => {
   const [userId, setUserID] = useState('');
@@ -17,8 +17,8 @@ const LoginPage: NextPage = (props) => {
   const [validUserId, setValidUserId] = useState(false);
   const [validPassWord, setValidPassWord] = useState(false);
   const dispatch = useDispatch();
-  //const user = useSelector((state) => state.user.value);
 
+  const router = useRouter();
   const onChangeUserId = (event: React.FormEvent<HTMLInputElement>) => {
     let valueUserId = event.currentTarget.value;
     const checkUserId = /^[A-Za-z0-9]{5,30}$/;
@@ -72,20 +72,20 @@ const LoginPage: NextPage = (props) => {
         id: userId,
         password: password,
       };
-      //dispatch(userLogin(body));
+      axios.post('/login', body).then((res) => {
+        console.log(res);
+        const code = res.status;
+        if (code === 200) {
+          dispatch(loginUser(res.data.data.user));
+          router.push('/');
+        }
+      });
     }
   };
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
+      <HeaderComponent />
       <Form onSubmit={onSubmitHandler}>
         <TextLabel htmlFor='userId'>아이디</TextLabel>
         {errUserId ? (

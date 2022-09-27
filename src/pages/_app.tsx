@@ -6,7 +6,9 @@ import GlobalStyle from '../styles/GlobalStyle';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useState } from 'react';
-import { wrapper } from '../redux/store';
+import { wrapper } from '../store/configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from '../store/configureStore';
 
 setupMSW();
 
@@ -19,7 +21,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <Background />
       <Content>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <PersistGate persistor={persistor} loading={null}>
+            <Component {...pageProps} />
+          </PersistGate>
         </QueryClientProvider>
       </Content>
     </>

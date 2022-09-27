@@ -10,6 +10,7 @@ import Pagination from '../components/Pagination';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Product } from '../types/product';
+import HeaderComponent from '../components/common/Header';
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
@@ -42,14 +43,7 @@ const PaginationPage: NextPage = () => {
 
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
+      <HeaderComponent />
       <Container>
         <ProductList products={products} />
         <Pagination totalCount={totalCount} setCurrentPage={setCurrentPage} />
