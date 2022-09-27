@@ -18,14 +18,12 @@ export const user = createSlice({
   reducers: {
     //login 성공시
     loginUser: (state, action) => {
-      // name, id에 API 값 받아오기
       state.name = action.payload.NAME;
       state.id = action.payload.ID;
       return state;
     },
     // logout 선택시
-    clearUser: (state) => {
-      // name, id 값을 비워줌.
+    clearUser: (state, action) => {
       state.name = '';
       state.id = '';
       return state;

@@ -12,7 +12,7 @@ function HeaderComponent() {
   const router = useRouter();
 
   const IsLogout = () => {
-    dispatch(clearUser(user)); //params에 들어올 값의 타입을 정의한 것이 없는데, params를 넣은 경우
+    dispatch(clearUser(user));
   };
 
   return (

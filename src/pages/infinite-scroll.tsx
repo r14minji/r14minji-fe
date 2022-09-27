@@ -8,12 +8,15 @@ import ProductList from '../components/ProductList';
 import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
 import HeaderComponent from '../components/common/Header';
+import useScrollPos from '../components/hooks/useScrollPos';
 
 const InfiniteScrollPage: NextPage = () => {
   const observerRef = useRef<IntersectionObserver>();
   const [intersecting, setIntersecting] = useState<boolean>(false);
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const [list, setLists] = useState<any>([]);
+  // const { loadPos } = useScrollPos();
+  // loadPos();
 
   const getObserver = useCallback(() => {
     if (!observerRef.current) {
@@ -30,9 +33,9 @@ const InfiniteScrollPage: NextPage = () => {
   }, [fetchMoreRef.current]);
 
   const getProductList = async (pageParam: number) => {
-    const res = await axios.get(`/products?page=${pageParam}&size=10`);
+    const res = await axios.get(`/products?page=${pageParam}&size=16`);
     const { products, totalCount } = res.data.data;
-    const totalLength = Math.ceil(totalCount / 10);
+    const totalLength = Math.ceil(totalCount / 16);
     const nextPage = pageParam < totalLength ? pageParam + 1 : undefined;
     return { products, nextPage, isLast: !nextPage };
   };

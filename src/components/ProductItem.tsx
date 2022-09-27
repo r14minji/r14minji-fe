@@ -2,15 +2,18 @@ import styled from 'styled-components';
 
 import { Product } from '../types/product';
 import useLocalStorage from 'use-local-storage';
+import useScrollPos from './hooks/useScrollPos';
+
 type ProductItemProps = {
   product: Product;
 };
 
 const changePrice = (price: number) => {
-  const priceNum = price;
-  const chagePirceNum = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const priceNum: number = price;
+  const chagePirceNum: string = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return chagePirceNum;
 };
+// const { savePos } = useScrollPos();
 
 const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
   <Container href={`/products/${id}`}>
@@ -24,10 +27,7 @@ const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemPro
 //   //const [scrollY, setScrollY] = useLocalStorage<number>('productScroll', 0);
 
 //   return (
-//     <Container
-//       href={`/products/${id}`}
-//       onClick={() => sessionStorage.setItem('scrollYKey', `${window.scrollY}`)}
-//     >
+//     <Container href={`/products/${id}`} onClick={save()}>
 //       <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
 //       <Name>{name}</Name>
 //       <Price>{changePrice(price)}</Price>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.5",
+    "@rooks/use-localstorage": "^4.11.2",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^0.27.2",
     "intersection-observer": "^0.12.2",

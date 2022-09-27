@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Product } from '../../types/product';
+// import useScrollPos from '../../components/hooks/useScrollPos';
 
 const ProductDetailPage: NextPage = () => {
   const router = useRouter();
@@ -33,12 +34,14 @@ const ProductDetailPage: NextPage = () => {
   const product: Product = resResualt?.data.data.product;
 
   const changePrice = (price: number) => {
-    const priceNum = price;
-    const chagePirceNum = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const priceNum: number = price;
+    const chagePirceNum: string = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     return chagePirceNum;
   };
 
+  // const { restorePos } = useScrollPos();
+  // restorePos();
   return (
     <>
       <Header>
