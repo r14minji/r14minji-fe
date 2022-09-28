@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import products from '../../api/data/products.json';
@@ -22,6 +22,7 @@ const ProductDetailPage: NextPage = () => {
     },
     {
       refetchOnWindowFocus: false,
+      enabled: id != null,
       onSuccess: (data) => {
         console.log('Status 200', data);
       },
@@ -39,6 +40,10 @@ const ProductDetailPage: NextPage = () => {
 
     return chagePirceNum;
   };
+
+  useEffect(() => {
+    if (id === undefined) return;
+  }, [id]);
 
   //const { restorePos } = useScrollPos();
   //restorePos();
@@ -61,7 +66,7 @@ const ProductDetailPage: NextPage = () => {
           </ProductInfoWrapper>
         </>
       ) : (
-        <NoProduct>존재하지 않는 상품입니다.</NoProduct>
+        <NoList>존재하지 않는 상품입니다.</NoList>
       )}
     </>
   );
@@ -100,7 +105,7 @@ const Price = styled.div`
   margin-top: 8px;
 `;
 
-const NoProduct = styled.div`
+const NoList = styled.div`
   text-align: center;
   padding: 100px 20px;
 `;

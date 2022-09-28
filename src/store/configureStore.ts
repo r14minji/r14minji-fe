@@ -1,4 +1,9 @@
-import { combineReducers, configureStore, EnhancedStore } from '@reduxjs/toolkit';
+import {
+  combineReducers,
+  configureStore,
+  EnhancedStore,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 import { createWrapper, MakeStore } from 'next-redux-wrapper';
 import user from './modules/user';
 import util from './modules/utils';

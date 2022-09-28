@@ -15,8 +15,6 @@ import HeaderComponent from '../components/common/Header';
 const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
-  //const [page, setPage] = useState(page);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const getProducts = async () => {
@@ -29,7 +27,7 @@ const PaginationPage: NextPage = () => {
     }
   };
   const { data: resResult, refetch } = useQuery([currentPage], getProducts, {
-    //enabled: page != null,
+    enabled: currentPage != null,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       console.log('Status 200', data);
@@ -42,13 +40,21 @@ const PaginationPage: NextPage = () => {
   const totalCount: number = resResult?.data.data.totalCount;
   const products: Product[] = resResult?.data.data.products;
 
+  useEffect(() => {
+    if (page === undefined) return;
+  }, [page]);
+
   return (
     <>
       <HeaderComponent />
-      <Container>
-        <ProductList products={products} />
-        <Pagination totalCount={totalCount} setCurrentPage={setCurrentPage} />
-      </Container>
+      {products ? (
+        <Container>
+          <ProductList products={products} />
+          <Pagination totalCount={totalCount} setCurrentPage={setCurrentPage} />
+        </Container>
+      ) : (
+        <NoList>존재하지 않는 페이지입니다.</NoList>
+      )}
     </>
   );
 };
@@ -60,4 +66,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 0 20px 40px;
+`;
+
+const NoList = styled.div`
+  text-align: center;
+  padding: 100px 20px;
 `;
