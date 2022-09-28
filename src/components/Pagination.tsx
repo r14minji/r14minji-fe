@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
 import { KeyObject } from 'crypto';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
 const Pagination = (props: any) => {
   let lastPage: number = Math.ceil(props.totalCount / 10);
@@ -14,12 +13,18 @@ const Pagination = (props: any) => {
   const onClickPage = (event: React.MouseEvent<HTMLButtonElement>) => {
     setActive(event.currentTarget.id);
     props.setCurrentPage?.(event.currentTarget.id);
+    console.log('target', event.currentTarget);
+    console.log('넘버아이디', Number(active));
+    console.log('넘버아이디', Number(active) / 5);
+    console.log('넘버아이디', 5 * (Number(active) / 5));
+    //props.setPage(event.currentTarget.id);
+    console.log(`startPage`, startPage);
   };
 
   const onClickPrevPage = (event: React.MouseEvent<HTMLButtonElement>) => {
     setStartPage(startPage - 5);
-    setActive(event.currentTarget.id);
-    props.setCurrentPage?.(event.currentTarget.id);
+    setActive(String(startPage - 1));
+    props.setCurrentPage?.(startPage - 1);
   };
 
   const onClickNextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -32,7 +37,12 @@ const Pagination = (props: any) => {
     let checkNumber = Number(active) % 5;
     if (checkNumber !== 0) return checkNumber;
     if (checkNumber === 0) return 5 * (Number(active) / 5);
+    console.log('active', checkNumber);
   };
+
+  useEffect(() => {
+    selectedCheck();
+  });
 
   return (
     <Container>
@@ -40,19 +50,19 @@ const Pagination = (props: any) => {
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {new Array(5).fill(1).map((_, i) => {
+        {new Array(5).fill(1).map((_, page) => {
+          //console.log(page + startPage);
           return (
             <>
-              {i + startPage <= lastPage ? (
+              {page + startPage <= lastPage ? (
                 <Page
-                  key={'num' + i}
-                  selected={i === 1}
-                  disabled={i === i + startPage}
+                  key={'num' + page}
+                  selected={page + 1 === selectedCheck()}
+                  disabled={page === page + startPage}
                   onClick={onClickPage}
-                  id={`${i + startPage}`}
-                  aria-current={i === i + startPage}
+                  id={`${page + startPage}`}
                 >
-                  {i + startPage}
+                  {page + startPage}
                 </Page>
               ) : null}
             </>
