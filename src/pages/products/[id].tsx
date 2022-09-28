@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Product } from '../../types/product';
-// import useScrollPos from '../../components/hooks/useScrollPos';
+//import useScrollPos from '../../components/hooks/useScrollPos';
 
 const ProductDetailPage: NextPage = () => {
   const router = useRouter();
@@ -40,8 +40,8 @@ const ProductDetailPage: NextPage = () => {
     return chagePirceNum;
   };
 
-  // const { restorePos } = useScrollPos();
-  // restorePos();
+  //const { restorePos } = useScrollPos();
+  //restorePos();
   return (
     <>
       <Header>

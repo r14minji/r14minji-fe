@@ -9,14 +9,24 @@ import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
 import HeaderComponent from '../components/common/Header';
 import useScrollPos from '../components/hooks/useScrollPos';
+import { useRouter } from 'next/router';
 
 const InfiniteScrollPage: NextPage = () => {
   const observerRef = useRef<IntersectionObserver>();
   const [intersecting, setIntersecting] = useState<boolean>(false);
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const [list, setLists] = useState<any>([]);
+
   // const { loadPos } = useScrollPos();
   // loadPos();
+
+  useEffect(() => {
+    //const scroll = parseInt(sessionStorage.getItem('productScroll'));
+
+    const scroll = sessionStorage.getItem('productScroll');
+    console.log(scroll);
+    if (scroll != null) window.scrollTo(0, parseInt(scroll));
+  });
 
   const getObserver = useCallback(() => {
     if (!observerRef.current) {

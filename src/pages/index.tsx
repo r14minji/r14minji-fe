@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import HeaderComponent from '../components/common/Header';
 
 const HomePage: NextPage = () => {
+  useEffect(() => {
+    sessionStorage.removeItem('productScroll');
+  });
+
   return (
     <>
       <HeaderComponent />

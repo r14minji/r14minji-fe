@@ -13,27 +13,31 @@ const changePrice = (price: number) => {
   const chagePirceNum: string = priceNum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return chagePirceNum;
 };
-// const { savePos } = useScrollPos();
 
-const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
-  <Container href={`/products/${id}`}>
-    <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
-    <Name>{name}</Name>
-    <Price>{changePrice(price)}</Price>
-  </Container>
-);
+// const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
+//   <Container href={`/products/${id}`}>
+//     <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+//     <Name>{name}</Name>
+//     <Price>{changePrice(price)}</Price>
+//   </Container>
+// );
 
-// const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => {
-//   //const [scrollY, setScrollY] = useLocalStorage<number>('productScroll', 0);
+const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => {
+  //const [scrollY, setScrollY] = useLocalStorage<number>('productScroll', 0);
 
-//   return (
-//     <Container href={`/products/${id}`} onClick={save()}>
-//       <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
-//       <Name>{name}</Name>
-//       <Price>{changePrice(price)}</Price>
-//     </Container>
-//   );
-// };
+  return (
+    <Container
+      href={`/products/${id}`}
+      onClick={() => {
+        sessionStorage.setItem('productScroll', `${window.scrollY}`);
+      }}
+    >
+      <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
+      <Name>{name}</Name>
+      <Price>{changePrice(price)}</Price>
+    </Container>
+  );
+};
 
 export default ProductItem;
 

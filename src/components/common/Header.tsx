@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useAppSelector } from '../../store/configureStore.hooks';
@@ -47,7 +47,7 @@ const Header = styled.div`
   padding: 20px;
 `;
 
-const Title = styled.a`
+const Title = styled.button`
   font-size: 48px;
 `;
 

@@ -15,6 +15,7 @@ import HeaderComponent from '../components/common/Header';
 const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
+  //const [page, setPage] = useState(page);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -53,17 +54,6 @@ const PaginationPage: NextPage = () => {
 };
 
 export default PaginationPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Container = styled.div`
   display: flex;
