@@ -1,13 +1,12 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginUser } from '../store/modules/user';
 import HeaderComponent from '../components/common/Header';
-import { IloginPost, LoninInfo, User } from '../types/product';
+import { LoninInfo, User } from '../types/product';
 
 const LoginPage: NextPage = (props) => {
   const [userId, setUserID] = useState<string>('');
@@ -18,8 +17,8 @@ const LoginPage: NextPage = (props) => {
   const [validUserId, setValidUserId] = useState<boolean>(false);
   const [validPassWord, setValidPassWord] = useState<boolean>(false);
   const dispatch = useDispatch();
-
   const router = useRouter();
+
   const onChangeUserId = (event: React.FormEvent<HTMLInputElement>) => {
     let valueUserId: string = event.currentTarget.value;
     const checkUserId: RegExp = /^[A-Za-z0-9]{5,30}$/;
@@ -64,25 +63,20 @@ const LoginPage: NextPage = (props) => {
     event.preventDefault();
     //console.log('id', userId);
     //console.log('password', password);
-    if (!userId) {
-      return alert('ID를 입력하세요.');
-    } else if (!password) {
-      return alert('Password를 입력하세요.');
-    } else {
-      let body: LoninInfo = {
-        id: userId,
-        password: password,
-      };
-      axios.post('/login', body).then((res) => {
-        console.log(res);
-        const code = res.status;
-        if (code === 200) {
-          const user: User = res.data.data.user;
-          dispatch(loginUser(user));
-          router.push('/');
-        }
-      });
-    }
+
+    let body: LoninInfo = {
+      id: userId,
+      password: password,
+    };
+    axios.post('/login', body).then((res) => {
+      console.log(res);
+      const code = res.status;
+      if (code === 200) {
+        const user: User = res.data.data.user;
+        dispatch(loginUser(user));
+        router.push('/');
+      }
+    });
   };
 
   return (
