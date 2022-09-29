@@ -7,21 +7,22 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/modules/user';
 import HeaderComponent from '../components/common/Header';
+import { IloginPost, LoninInfo, User } from '../types/product';
 
 const LoginPage: NextPage = (props) => {
-  const [userId, setUserID] = useState('');
-  const [password, setPassword] = useState('');
-  const [errUserId, setErrUserId] = useState(false);
-  const [errPassword, setErrPassword] = useState(false);
-  const [disable, setDisabled] = useState(true);
-  const [validUserId, setValidUserId] = useState(false);
-  const [validPassWord, setValidPassWord] = useState(false);
+  const [userId, setUserID] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [errUserId, setErrUserId] = useState<boolean>(false);
+  const [errPassword, setErrPassword] = useState<boolean>(false);
+  const [disable, setDisabled] = useState<boolean>(true);
+  const [validUserId, setValidUserId] = useState<boolean>(false);
+  const [validPassWord, setValidPassWord] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   const router = useRouter();
   const onChangeUserId = (event: React.FormEvent<HTMLInputElement>) => {
-    let valueUserId = event.currentTarget.value;
-    const checkUserId = /^[A-Za-z0-9]{5,30}$/;
+    let valueUserId: string = event.currentTarget.value;
+    const checkUserId: RegExp = /^[A-Za-z0-9]{5,30}$/;
     if (checkUserId.test(valueUserId)) {
       setErrUserId(false);
       setValidUserId(true);
@@ -30,15 +31,15 @@ const LoginPage: NextPage = (props) => {
   };
 
   const onBlurUserId = (event: React.FormEvent<HTMLInputElement>) => {
-    let valueUserId = event.currentTarget.value;
-    const checkUserId = /^[A-Za-z0-9]{5,30}$/;
+    let valueUserId: string = event.currentTarget.value;
+    const checkUserId: RegExp = /^[A-Za-z0-9]{5,30}$/;
     !valueUserId || checkUserId.test(valueUserId) ? setErrUserId(false) : setErrUserId(true);
     setUserID(valueUserId);
   };
 
   const onChangePassword = (event: React.FormEvent<HTMLInputElement>) => {
-    let valuePassword = event.currentTarget.value;
-    const checkPassword = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
+    let valuePassword: string = event.currentTarget.value;
+    const checkPassword: RegExp = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
     if (checkPassword.test(valuePassword)) {
       setErrPassword(false);
       setValidPassWord(true);
@@ -47,8 +48,8 @@ const LoginPage: NextPage = (props) => {
   };
 
   const onBlurPassword = (event: React.FormEvent<HTMLInputElement>) => {
-    let valuePassword = event.currentTarget.value;
-    const checkPassword = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
+    let valuePassword: string = event.currentTarget.value;
+    const checkPassword: RegExp = /(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,30}$/;
     !valuePassword || checkPassword.test(valuePassword)
       ? setErrPassword(false)
       : setErrPassword(true);
@@ -61,14 +62,14 @@ const LoginPage: NextPage = (props) => {
 
   const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('id', userId);
-    console.log('password', password);
+    //console.log('id', userId);
+    //console.log('password', password);
     if (!userId) {
       return alert('ID를 입력하세요.');
     } else if (!password) {
       return alert('Password를 입력하세요.');
     } else {
-      let body = {
+      let body: LoninInfo = {
         id: userId,
         password: password,
       };
@@ -76,7 +77,8 @@ const LoginPage: NextPage = (props) => {
         console.log(res);
         const code = res.status;
         if (code === 200) {
-          dispatch(loginUser(res.data.data.user));
+          const user: User = res.data.data.user;
+          dispatch(loginUser(user));
           router.push('/');
         }
       });
@@ -88,49 +90,26 @@ const LoginPage: NextPage = (props) => {
       <HeaderComponent />
       <Form onSubmit={onSubmitHandler}>
         <TextLabel htmlFor='userId'>아이디</TextLabel>
-        {errUserId ? (
-          <TextInput
-            id='userId'
-            type='text'
-            value={userId}
-            onChange={onChangeUserId}
-            onBlur={onBlurUserId}
-            onKeyUp={checkValue}
-            isErr
-          />
-        ) : (
-          <TextInput
-            id='userId'
-            type='text'
-            value={userId}
-            onChange={onChangeUserId}
-            onBlur={onBlurUserId}
-            onKeyUp={checkValue}
-          />
-        )}
+        <TextInput
+          id='userId'
+          type='text'
+          value={userId}
+          onChange={onChangeUserId}
+          onBlur={onBlurUserId}
+          onKeyUp={checkValue}
+          isErr={errUserId}
+        />
         {errUserId && <TextErr>올바른 아이디 형식으로 입력해주세요.</TextErr>}
         <TextLabel htmlFor='password'>비밀번호</TextLabel>
-        {errPassword ? (
-          <TextInput
-            id='userId'
-            type='password'
-            value={password}
-            onChange={onChangePassword}
-            onBlur={onBlurPassword}
-            onKeyUp={checkValue}
-            isErr
-          />
-        ) : (
-          <TextInput
-            id='userId'
-            type='password'
-            value={password}
-            onChange={onChangePassword}
-            onBlur={onBlurPassword}
-            onKeyUp={checkValue}
-          />
-        )}
-
+        <TextInput
+          id='userId'
+          type='password'
+          value={password}
+          onChange={onChangePassword}
+          onBlur={onBlurPassword}
+          onKeyUp={checkValue}
+          isErr={errPassword}
+        />
         {errPassword && <TextErr>올바른 비밀번호 형식으로 입력해주세요.</TextErr>}
         <LoginButton type='submit' disabled={disable}>
           로그인
@@ -141,17 +120,6 @@ const LoginPage: NextPage = (props) => {
 };
 
 export default LoginPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Form = styled.form`
   display: flex;

@@ -9,25 +9,28 @@ import Pagination from '../components/Pagination';
 
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Product } from '../types/product';
+import { IProductsGet, Product } from '../types/product';
 import HeaderComponent from '../components/common/Header';
 
 const PaginationPage: NextPage = () => {
   const router = useRouter();
   const { page } = router.query;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  //console.log('page', page);
 
-  const axiosProductsGet = async () => {
+  const productsGet = async () => {
     try {
-      const res = await axios.get(`/products?page=${currentPage}&size=10`);
+      const res: IProductsGet = await axios
+        .get(`/products?page=${currentPage}&size=10`)
+        .then((res) => res.data);
       console.log('Status 200');
       return res;
     } catch (err) {
       console.log('error');
     }
   };
-  const { data: resResult, refetch } = useQuery([currentPage], axiosProductsGet, {
-    enabled: currentPage != null,
+  const { data: resResult, refetch } = useQuery([currentPage], productsGet, {
+    enabled: page != null,
     refetchOnWindowFocus: false,
     onSuccess: (data) => {
       console.log('Status 200', data);
@@ -37,16 +40,21 @@ const PaginationPage: NextPage = () => {
     },
   });
 
-  const totalCount: number = resResult?.data.data.totalCount;
-  const products: Product[] = resResult?.data.data.products;
+  console.log('resResult', resResult);
+  const totalCount = resResult?.data.totalCount;
+  const products = resResult?.data.products;
+  let lastPage: number = Math.ceil((totalCount as number) / 10);
+
+  // useEffect(() => {
+  //   setCurrentPage(Number(page));
+  // }, [page]);
 
   return (
     <>
       <HeaderComponent />
-
       <Container>
-        <ProductList products={products} />
-        <Pagination totalCount={totalCount} setCurrentPage={setCurrentPage} />
+        <ProductList products={products as Product[]} />
+        <Pagination totalCount={totalCount} setCurrentPage={setCurrentPage} lastPage={lastPage} />
       </Container>
     </>
   );

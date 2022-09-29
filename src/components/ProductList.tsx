@@ -10,7 +10,7 @@ type ProductListProps = {
 const ProductList = ({ products }: ProductListProps) => (
   <Container>
     {products &&
-      products.map((product) => <ProductItem key={'prd' + product.id} product={product} />)}
+      products.map((product) => <ProductItem key={'pd' + product.id} product={product} />)}
   </Container>
 );
 

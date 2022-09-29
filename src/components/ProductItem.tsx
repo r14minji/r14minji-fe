@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 
 import { Product } from '../types/product';
-import { useRouter } from 'next/router';
-import useLocalStorage from 'use-local-storage';
-import useScrollPos from './hooks/useScrollPos';
 
 type ProductItemProps = {
   product: Product;
@@ -15,17 +12,7 @@ const changePrice = (price: number) => {
   return chagePirceNum;
 };
 
-// const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => (
-//   <Container href={`/products/${id}`}>
-//     <Thumbnail src={thumbnail ? thumbnail : '/defaultThumbnail.jpg'} />
-//     <Name>{name}</Name>
-//     <Price>{changePrice(price)}</Price>
-//   </Container>
-// );
-
 const ProductItem = ({ product: { name, thumbnail, price, id } }: ProductItemProps) => {
-  //const [scrollY, setScrollY] = useLocalStorage<number>('productScroll', 0);
-  const router = useRouter();
   return (
     <Container
       href={`/products/${id}`}

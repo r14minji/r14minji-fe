@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useAppSelector } from '../../store/configureStore.hooks';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { clearUser, userValue } from '../../store/modules/user';
-import { useRouter } from 'next/router';
 
 function HeaderComponent() {
-  const user: userValue = useAppSelector((state) => state.persistedReducer.user);
+  const user: userValue = useAppSelector((state) => state.persistedReducer.userSlice);
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const IsLogout = () => {
     dispatch(clearUser(user));

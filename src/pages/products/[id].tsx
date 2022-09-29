@@ -7,8 +7,7 @@ import products from '../../api/data/products.json';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Product } from '../../types/product';
-//import useScrollPos from '../../components/hooks/useScrollPos';
+import { IProducts_ProductId_Get, Product } from '../../types/product';
 
 const ProductDetailPage: NextPage = () => {
   const router = useRouter();
@@ -16,7 +15,7 @@ const ProductDetailPage: NextPage = () => {
   const { data: resResualt } = useQuery(
     [id],
     async () => {
-      const res = await axios.get(`/products/${id}`);
+      const res = await axios.get(`/products/${id}`); //타입추가하면 아래에서 에러
       console.log('Status 200');
       return res;
     },
@@ -45,8 +44,6 @@ const ProductDetailPage: NextPage = () => {
     if (id === undefined) return;
   }, [id]);
 
-  //const { restorePos } = useScrollPos();
-  //restorePos();
   return (
     <>
       <Header>

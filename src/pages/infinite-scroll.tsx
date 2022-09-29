@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import type { NextPage } from 'next';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -8,8 +7,7 @@ import ProductList from '../components/ProductList';
 import axios from 'axios';
 import { useInfiniteQuery } from 'react-query';
 import HeaderComponent from '../components/common/Header';
-import useScrollPos from '../components/hooks/useScrollPos';
-import { useRouter } from 'next/router';
+import { IProductsGet, Product } from '../types/product';
 
 const InfiniteScrollPage: NextPage = () => {
   const observerRef = useRef<IntersectionObserver>();
@@ -17,17 +15,13 @@ const InfiniteScrollPage: NextPage = () => {
   const fetchMoreRef = useRef<HTMLDivElement>(null);
   const [list, setLists] = useState<any>([]);
 
-  // const { loadPos } = useScrollPos();
-  // loadPos();
-
+  //저장된 스크롤 위치로 이동
   useEffect(() => {
-    //const scroll = parseInt(sessionStorage.getItem('productScroll'));
-
     const scroll = sessionStorage.getItem('productScroll');
-    console.log(scroll);
     if (scroll != null) window.scrollTo(0, parseInt(scroll));
   });
 
+  //페이지의 마지막 아이템 체크
   const getObserver = useCallback(() => {
     if (!observerRef.current) {
       observerRef.current = new IntersectionObserver((entries) => {
@@ -36,16 +30,19 @@ const InfiniteScrollPage: NextPage = () => {
       });
     }
     return observerRef.current;
-  }, [observerRef.current]);
+  }, []);
 
   useEffect(() => {
     if (fetchMoreRef.current) getObserver().observe(fetchMoreRef.current);
-  }, [fetchMoreRef.current]);
+  }, [getObserver]);
 
+  //목록 가지고 오기
   const getProductList = async (pageParam: number) => {
-    const res = await axios.get(`/products?page=${pageParam}&size=16`);
-    const { products, totalCount } = res.data.data;
-    const totalLength = Math.ceil(totalCount / 16);
+    const res: IProductsGet = await axios
+      .get(`/products?page=${pageParam}&size=16`)
+      .then((res) => res.data);
+    const { products, totalCount } = res.data;
+    const totalLength = Math.ceil((totalCount as number) / 16);
     const nextPage = pageParam < totalLength ? pageParam + 1 : undefined;
     return { products, nextPage, isLast: !nextPage };
   };
@@ -62,9 +59,9 @@ const InfiniteScrollPage: NextPage = () => {
     console.log('data', data);
     if (data) {
       const items = data.pages
-        .map((page) => page.products.map((product: any) => (product !== null ? product : [])))
+        .map((page) => page.products.map((product: Product) => (product !== null ? product : [])))
         .flat();
-      //console.log('items', items);
+      console.log('items', items);
       setLists(items);
     }
   }, [data]);
@@ -87,17 +84,6 @@ const InfiniteScrollPage: NextPage = () => {
 };
 
 export default InfiniteScrollPage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Container = styled.div`
   display: flex;
