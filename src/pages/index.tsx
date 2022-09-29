@@ -1,19 +1,17 @@
 import Link from 'next/link';
 import type { NextPage } from 'next';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import HeaderComponent from '../components/common/Header';
 
 const HomePage: NextPage = () => {
+  useEffect(() => {
+    sessionStorage.removeItem('productScroll');
+  });
+
   return (
     <>
-      <Header>
-        <Link href='/'>
-          <Title>HAUS</Title>
-        </Link>
-        <Link href='/login'>
-          <p>login</p>
-        </Link>
-      </Header>
+      <HeaderComponent />
       <Container>
         <Link href='/pagination?page=1'>
           <StyledLink>pagination</StyledLink>
@@ -27,17 +25,6 @@ const HomePage: NextPage = () => {
 };
 
 export default HomePage;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-`;
-
-const Title = styled.a`
-  font-size: 48px;
-`;
 
 const Container = styled.div`
   display: flex;

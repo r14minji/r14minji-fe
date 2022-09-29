@@ -1,21 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { VscChevronLeft, VscChevronRight } from 'react-icons/vsc';
+import { KeyObject } from 'crypto';
+import { useRouter } from 'next/router';
 
-const Pagination = () => {
+const Pagination = (props: any) => {
+  const [startPage, setStartPage] = useState<number>(1);
+  const [active, setActive] = useState<string>('1');
+  const router = useRouter();
+
+  const onClickPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setActive(event.currentTarget.id);
+    props.setCurrentPage?.(event.currentTarget.id);
+    // router.push(`/pagination?page=${event.currentTarget.id}`);
+  };
+
+  const onClickPrevPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setStartPage(startPage - 5);
+    setActive(String(startPage - 1));
+    props.setCurrentPage?.(startPage - 1);
+  };
+
+  const onClickNextPage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setStartPage(startPage + 5);
+    setActive(event.currentTarget.id);
+    props.setCurrentPage?.(event.currentTarget.id);
+  };
+
+  const selectedCheck = () => {
+    let checkNumber = Number(active) % 5;
+    if (checkNumber !== 0) return checkNumber;
+    if (checkNumber === 0) return 5 * (Number(active) / 5);
+    //console.log('active', checkNumber);
+  };
+
+  useEffect(() => {
+    selectedCheck();
+  });
+
   return (
     <Container>
-      <Button disabled>
+      <Button disabled={startPage === 1} onClick={onClickPrevPage} id={`${startPage - 5}`}>
         <VscChevronLeft />
       </Button>
       <PageWrapper>
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Page key={page} selected={page === 1} disabled={page === 1}>
-            {page}
-          </Page>
-        ))}
+        {new Array(5).fill(1).map((_, i) => {
+          return (
+            <>
+              {i + startPage <= props.lastPage ? (
+                <Page
+                  key={'num' + i}
+                  selected={i + 1 === selectedCheck()}
+                  disabled={i === i + startPage}
+                  onClick={onClickPage}
+                  id={`${i + startPage}`}
+                >
+                  {i + startPage}
+                </Page>
+              ) : null}
+            </>
+          );
+        })}
       </PageWrapper>
-      <Button disabled={false}>
+      <Button
+        disabled={startPage + 5 > props.lastPage}
+        onClick={onClickNextPage}
+        id={`${startPage + 5}`}
+      >
         <VscChevronRight />
       </Button>
     </Container>

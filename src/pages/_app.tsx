@@ -4,21 +4,35 @@ import styled from 'styled-components';
 import setupMSW from '../api/setup';
 import GlobalStyle from '../styles/GlobalStyle';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { useState } from 'react';
+import { wrapper } from '../store/configureStore';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from '../store/configureStore';
+
 setupMSW();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
+  const [queryClient] = useState(() => new QueryClient());
+
   return (
     <>
       <GlobalStyle />
       <Background />
       <Content>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <PersistGate persistor={persistor} loading={null}>
+            <Component {...pageProps} />
+          </PersistGate>
+        </QueryClientProvider>
       </Content>
     </>
   );
 }
 
-export default MyApp;
+//export default MyApp;
+
+export default wrapper.withRedux(MyApp);
 
 const Background = styled.div`
   position: fixed;
